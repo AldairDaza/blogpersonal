@@ -74,6 +74,13 @@ const imageStyle = (path) => path ? `style="background-image:url('${encodeURI(pa
 if (gamesGrid) gamesGrid.innerHTML = games.map((name, index) => `<a class="media-card game-${index}" ${imageStyle(gameImages[name])} href="https://store.steampowered.com/search/?term=${encodeURIComponent(name)}" target="_blank" rel="noreferrer"><span class="media-card-copy"><strong>${name}</strong><small>Buscar en Steam ↗</small></span></a>`).join('');
 if (seriesGrid) seriesGrid.innerHTML = series.map((name, index) => `<article class="media-card series-${index}" ${imageStyle(seriesImages[name])}><span class="media-card-copy"><strong>${name}</strong><small>${seriesImages[name] ? 'Imagen añadida' : 'Imagen pendiente'}</small></span></article>`).join('');
 
+const stackGrid = document.querySelector('#stack-grid');
+const stackItems = [
+  ['Py','Python','Lenguaje','lenguajes'], ['JS','JavaScript','Lenguaje','lenguajes'], ['<>','HTML / CSS','Lenguaje web','lenguajes'],
+  ['Git','Git / GitHub','Control de versiones','herramientas'], ['GC','Google Cloud','Cloud','herramientas'], ['VS','VS Code','Editor','herramientas'],
+];
+if (stackGrid) stackGrid.innerHTML = stackItems.map(([mark, name, type, group]) => `<article class="stack-card" data-group="${group}"><span class="stack-mark">${mark}</span><div><strong>${name}</strong><small>${type}</small></div></article>`).join('');
+
 const typingTarget = document.querySelector('#typing-text');
 const typingPhrases = ['creando experiencias digitales', 'explorando inteligencia artificial', 'diseñando ideas con propósito', 'aprendiendo mientras construyo'];
 if (typingTarget) {
