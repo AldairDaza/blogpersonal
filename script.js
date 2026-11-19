@@ -39,11 +39,13 @@ const departmentGrid = document.querySelector('#department-grid');
 const departments = ['Amazonas','Áncash','Apurímac','Arequipa','Ayacucho','Cajamarca','Callao','Cusco','Huancavelica','Huánuco','Ica','Junín','La Libertad','Lambayeque','Lima','Loreto','Madre de Dios','Moquegua','Pasco','Piura','Puno','San Martín','Tacna','Tumbes','Ucayali'];
 const visitedDepartments = ['La Libertad','Lambayeque','Cusco','Lima','Loreto','Áncash'];
 const travelReference = 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=900&q=80';
+const travelImages = {'La Libertad':'media/pasatiempos/trujillo.jpg','Lambayeque':'media/pasatiempos/chiclayo.jpg','Cusco':'media/pasatiempos/images.jpg','Lima':'media/pasatiempos/lima.jpg','Loreto':'media/pasatiempos/loreto.jpg','Áncash':'media/pasatiempos/huaraz.jpg'};
 
 if (departmentGrid) {
   departmentGrid.innerHTML = departments.map((name) => {
     const visited = visitedDepartments.includes(name);
-    return `<button class="department-card ${visited ? 'visited' : 'pending'}" type="button" data-department="${name}"><span class="department-photo" style="background-image:url('${travelReference}')"></span><span class="department-name">${name}</span><small>${visited ? 'Visitado' : 'Foto pendiente'}</small></button>`;
+    const image = travelImages[name] || travelReference;
+    return `<button class="department-card ${visited ? 'visited' : 'pending'}" type="button" data-department="${name}"><span class="department-photo" style="background-image:url('${encodeURI(image)}')"></span><span class="department-name">${name}</span><small>${visited ? 'Visitado' : 'Foto pendiente'}</small></button>`;
   }).join('');
 }
 const allAlbums = [album, gamesAlbum, seriesAlbum].filter(Boolean);
@@ -64,7 +66,10 @@ document.addEventListener('keydown', (event) => { if (event.key === 'Escape') hi
 
 const games = ['Apex Legends','Dota 2','Smite 2','ARK: Survival Ascended','God of War','The Binding of Isaac'];
 const series = ['From','Lost','The Flash','The Good Doctor','CSI: Miami','Shingeki no Kyojin','Nanatsu no Taizai'];
+const gameImages = {'Dota 2':'media/videojuegos/dota.jpg','Smite 2':'media/videojuegos/smite-2.jpg','ARK: Survival Ascended':'media/videojuegos/ark survival ascended.jpg','God of War':'media/videojuegos/god of war.jpg','The Binding of Isaac':'media/videojuegos/the binding of isaac.jpg'};
+const seriesImages = {'From':'media/series/from.jpg','Lost':'media/series/lost.jpg','The Flash':'media/series/flash.jpg','The Good Doctor':'media/series/the good doctor.jpg','Shingeki no Kyojin':'media/series/shingeki no kyoying.jpg','Nanatsu no Taizai':'media/series/nanatzu.jpg'};
 const gamesGrid = document.querySelector('#games-grid');
 const seriesGrid = document.querySelector('#series-grid');
-if (gamesGrid) gamesGrid.innerHTML = games.map((name, index) => `<a class="media-card game-${index}" href="https://store.steampowered.com/search/?term=${encodeURIComponent(name)}" target="_blank" rel="noreferrer"><span class="media-card-copy"><strong>${name}</strong><small>Buscar en Steam ↗</small></span></a>`).join('');
-if (seriesGrid) seriesGrid.innerHTML = series.map((name, index) => `<article class="media-card series-${index}"><span class="media-card-copy"><strong>${name}</strong><small>Serie favorita</small></span></article>`).join('');
+const imageStyle = (path) => path ? `style="background-image:url('${encodeURI(path)}')"` : '';
+if (gamesGrid) gamesGrid.innerHTML = games.map((name, index) => `<a class="media-card game-${index}" ${imageStyle(gameImages[name])} href="https://store.steampowered.com/search/?term=${encodeURIComponent(name)}" target="_blank" rel="noreferrer"><span class="media-card-copy"><strong>${name}</strong><small>Buscar en Steam ↗</small></span></a>`).join('');
+if (seriesGrid) seriesGrid.innerHTML = series.map((name, index) => `<article class="media-card series-${index}" ${imageStyle(seriesImages[name])}><span class="media-card-copy"><strong>${name}</strong><small>${seriesImages[name] ? 'Imagen añadida' : 'Imagen pendiente'}</small></span></article>`).join('');
