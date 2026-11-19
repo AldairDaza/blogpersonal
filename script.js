@@ -73,3 +73,26 @@ const seriesGrid = document.querySelector('#series-grid');
 const imageStyle = (path) => path ? `style="background-image:url('${encodeURI(path)}')"` : '';
 if (gamesGrid) gamesGrid.innerHTML = games.map((name, index) => `<a class="media-card game-${index}" ${imageStyle(gameImages[name])} href="https://store.steampowered.com/search/?term=${encodeURIComponent(name)}" target="_blank" rel="noreferrer"><span class="media-card-copy"><strong>${name}</strong><small>Buscar en Steam ↗</small></span></a>`).join('');
 if (seriesGrid) seriesGrid.innerHTML = series.map((name, index) => `<article class="media-card series-${index}" ${imageStyle(seriesImages[name])}><span class="media-card-copy"><strong>${name}</strong><small>${seriesImages[name] ? 'Imagen añadida' : 'Imagen pendiente'}</small></span></article>`).join('');
+
+const typingTarget = document.querySelector('#typing-text');
+const typingPhrases = ['creando experiencias digitales', 'explorando inteligencia artificial', 'diseñando ideas con propósito', 'aprendiendo mientras construyo'];
+if (typingTarget) {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reducedMotion) typingTarget.textContent = typingPhrases[0];
+  else {
+    let phraseIndex = 0;
+    let characterIndex = 0;
+    let deleting = false;
+    const typePhrase = () => {
+      const phrase = typingPhrases[phraseIndex];
+      typingTarget.textContent = phrase.slice(0, characterIndex);
+      if (!deleting && characterIndex < phrase.length) { characterIndex += 1; setTimeout(typePhrase, 62); return; }
+      if (!deleting) { deleting = true; setTimeout(typePhrase, 1700); return; }
+      if (characterIndex > 0) { characterIndex -= 1; setTimeout(typePhrase, 32); return; }
+      deleting = false;
+      phraseIndex = (phraseIndex + 1) % typingPhrases.length;
+      setTimeout(typePhrase, 360);
+    };
+    typePhrase();
+  }
+}
