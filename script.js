@@ -17,7 +17,7 @@ const observer = new IntersectionObserver((entries) => entries.forEach((entry) =
 sections.forEach((section) => observer.observe(section));
 
 const header = document.querySelector('.site-header');
-const revealItems = document.querySelectorAll('.about-content, .project-card, .hobby-card, .featured-post, .blog article, .contact-panel');
+const revealItems = document.querySelectorAll('.about-content, .project-card, .hobby-card, .contact-panel');
 revealItems.forEach((item) => item.classList.add('reveal-item'));
 const revealObserver = new IntersectionObserver((entries, obs) => entries.forEach((entry) => {
   if (!entry.isIntersecting) return;
