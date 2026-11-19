@@ -32,10 +32,12 @@ const STEAM_PROFILE_URL = 'https://steamcommunity.com/';
 const travelCard = document.querySelector('.hobby-travel');
 const gamesCard = document.querySelector('.hobby-games');
 const album = document.querySelector('#travel-album');
-const closeAlbum = document.querySelector('.album-close');
+const gamesAlbum = document.querySelector('#games-album');
+const seriesAlbum = document.querySelector('#series-album');
+const closeButtons = document.querySelectorAll('.album-close');
 const departmentGrid = document.querySelector('#department-grid');
 const departments = ['Amazonas','Áncash','Apurímac','Arequipa','Ayacucho','Cajamarca','Callao','Cusco','Huancavelica','Huánuco','Ica','Junín','La Libertad','Lambayeque','Lima','Loreto','Madre de Dios','Moquegua','Pasco','Piura','Puno','San Martín','Tacna','Tumbes','Ucayali'];
-const visitedDepartments = [];
+const visitedDepartments = ['La Libertad','Lambayeque','Cusco','Lima','Loreto','Áncash'];
 const travelReference = 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=900&q=80';
 
 if (departmentGrid) {
@@ -44,12 +46,25 @@ if (departmentGrid) {
     return `<button class="department-card ${visited ? 'visited' : 'pending'}" type="button" data-department="${name}"><span class="department-photo" style="background-image:url('${travelReference}')"></span><span class="department-name">${name}</span><small>${visited ? 'Visitado' : 'Foto pendiente'}</small></button>`;
   }).join('');
 }
-const openAlbum = () => { album?.classList.add('is-open'); album?.setAttribute('aria-hidden', 'false'); };
-const hideAlbum = () => { album?.classList.remove('is-open'); album?.setAttribute('aria-hidden', 'true'); };
+const allAlbums = [album, gamesAlbum, seriesAlbum].filter(Boolean);
+const showAlbum = (target) => { allAlbums.forEach((item) => { item.classList.toggle('is-open', item === target); item.setAttribute('aria-hidden', item === target ? 'false' : 'true'); }); target?.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
+const hideAlbums = () => allAlbums.forEach((item) => { item.classList.remove('is-open'); item.setAttribute('aria-hidden', 'true'); });
+const openAlbum = () => showAlbum(album);
 travelCard?.addEventListener('click', openAlbum);
 travelCard?.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openAlbum(); } });
-gamesCard?.addEventListener('click', () => window.open(STEAM_PROFILE_URL, '_blank', 'noopener,noreferrer'));
-gamesCard?.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); window.open(STEAM_PROFILE_URL, '_blank', 'noopener,noreferrer'); } });
-closeAlbum?.addEventListener('click', hideAlbum);
-album?.addEventListener('click', (event) => { if (event.target === album) hideAlbum(); });
-document.addEventListener('keydown', (event) => { if (event.key === 'Escape') hideAlbum(); });
+gamesCard?.addEventListener('click', () => showAlbum(gamesAlbum));
+gamesCard?.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); showAlbum(gamesAlbum); } });
+const seriesCard = document.querySelector('.hobby-series');
+seriesCard?.addEventListener('click', () => showAlbum(seriesAlbum));
+seriesCard?.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); showAlbum(seriesAlbum); } });
+closeButtons.forEach((button) => button.addEventListener('click', () => { const target = document.querySelector(`#${button.dataset.close || 'travel-album'}`); target?.classList.remove('is-open'); target?.setAttribute('aria-hidden', 'true'); }));
+album?.addEventListener('click', (event) => { if (event.target === album) hideAlbums(); });
+allAlbums.filter((item) => item !== album).forEach((item) => item.addEventListener('click', (event) => { if (event.target === item) hideAlbums(); }));
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape') hideAlbums(); });
+
+const games = ['Apex Legends','Dota 2','Smite 2','ARK: Survival Ascended','God of War','The Binding of Isaac'];
+const series = ['From','Lost','The Flash','The Good Doctor','CSI: Miami','Shingeki no Kyojin','Nanatsu no Taizai'];
+const gamesGrid = document.querySelector('#games-grid');
+const seriesGrid = document.querySelector('#series-grid');
+if (gamesGrid) gamesGrid.innerHTML = games.map((name, index) => `<a class="media-card game-${index}" href="https://store.steampowered.com/search/?term=${encodeURIComponent(name)}" target="_blank" rel="noreferrer"><span class="media-card-copy"><strong>${name}</strong><small>Buscar en Steam ↗</small></span></a>`).join('');
+if (seriesGrid) seriesGrid.innerHTML = series.map((name, index) => `<article class="media-card series-${index}"><span class="media-card-copy"><strong>${name}</strong><small>Serie favorita</small></span></article>`).join('');
