@@ -15,3 +15,14 @@ const observer = new IntersectionObserver((entries) => entries.forEach((entry) =
   links.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`));
 }), { rootMargin: '-35% 0px -55% 0px' });
 sections.forEach((section) => observer.observe(section));
+
+const header = document.querySelector('.site-header');
+const revealItems = document.querySelectorAll('.about-content, .project-card, .hobby-card, .featured-post, .blog article, .contact-panel');
+revealItems.forEach((item) => item.classList.add('reveal-item'));
+const revealObserver = new IntersectionObserver((entries, obs) => entries.forEach((entry) => {
+  if (!entry.isIntersecting) return;
+  entry.target.classList.add('is-visible');
+  obs.unobserve(entry.target);
+}), { threshold: 0.12 });
+revealItems.forEach((item) => revealObserver.observe(item));
+window.addEventListener('scroll', () => header?.classList.toggle('scrolled', window.scrollY > 30), { passive: true });
